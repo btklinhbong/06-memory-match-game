@@ -182,7 +182,7 @@ function handleCardClick(event) {
   checkForMatch();
 }
 
-//=== Build card elements from the shuffled deck and add them to the game board. ===>
+// Build card elements from the shuffled deck and add them to the game board.
 function renderCards(deck) {
   if (!gameBoard) {
     return;
