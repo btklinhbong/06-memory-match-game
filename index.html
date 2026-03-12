@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic metadata for character support and responsive layout -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Browser tab title -->
+  <title>Emoji Memory Match Game</title>
+  <!-- External stylesheet for all visual styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top heading introduces the game -->
+  <header>
+    <h1>Emoji Memory Match Game</h1>
+  </header>
+
+  <!-- Main page content -->
+  <main>
+    <!-- Dashboard shows live game info and controls -->
+    <section class="dashboard" aria-label="Game dashboard">
+      <!-- Move counter starts at 0 and updates during gameplay -->
+      <p>Moves: <span id="move-counter">0</span></p>
+      <!-- Timer starts at 00:00 and updates every second -->
+      <p>Time: <span id="timer">00:00</span></p>
+      <!-- Button to reset and restart the game -->
+      <button id="restart-button" type="button">Restart</button>
+    </section>
+
+    <!-- Empty container where JavaScript will create memory cards -->
+    <section aria-label="Game board">
+      <div id="game-board"></div>
+    </section>
+  </main>
+
+  <!-- JavaScript file that adds game logic (defer waits for HTML to load first) -->
+  <script src="script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@400;600;700&display=swap");
+
+/* Color and spacing variables make the design easy to tweak later. */
+:root {
+  --bg-top: #f7fbff;
+  --bg-bottom: #e7f6ed;
+  --surface: #ffffff;
+  --text: #1d2a3a;
+  --muted: #5a6a7d;
+  --accent: #ff7a59;
+  --accent-dark: #e45d3e;
+  --board-shadow: 0 14px 30px rgba(21, 58, 83, 0.14);
+  --card-shadow: 0 10px 22px rgba(12, 44, 67, 0.15);
+  --card-back-a: #1c6f95;
+  --card-back-b: #134f6a;
+  --card-border: #d7e4ef;
+}
+
+/* Remove default spacing surprises and keep width calculations predictable. */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Nunito", "Trebuchet MS", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.85), transparent 30%),
+    radial-gradient(circle at 90% 85%, rgba(255, 255, 255, 0.7), transparent 30%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  margin: 0;
+  font-family: "Fredoka", "Verdana", sans-serif;
+  font-size: clamp(1.7rem, 2.2vw + 1rem, 2.5rem);
+  letter-spacing: 0.02em;
+}
+
+main {
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+
+/* Top status area for moves, timer, and restart control. */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 0.85rem 1rem;
+  box-shadow: var(--board-shadow);
+}
+
+.dashboard p {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(0.95rem, 1vw + 0.55rem, 1.15rem);
+  font-weight: 700;
+  color: var(--muted);
+}
+
+#move-counter,
+#timer {
+  color: var(--text);
+}
+
+#restart-button {
+  justify-self: center;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+  color: #ffffff;
+  font-family: "Fredoka", "Verdana", sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+#restart-button:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+#restart-button:active {
+  transform: translateY(0);
+}
+
+/*
+  4x4 game grid.
+  - repeat(4, 1fr) creates 4 equal columns.
+  - Each card uses aspect-ratio: 1/1 to stay square.
+*/
+#game-board {
+  width: min(92vw, 560px);
+  margin: 1.2rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.45rem, 1.5vw, 0.9rem);
+}
+
+/* Outer card wrapper gives perspective (depth) for 3D flipping. */
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  perspective: 900px;
+  cursor: pointer;
+}
+
+/* Inner element rotates when the card gets the .flipped class. */
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+/* Toggle this class in JavaScript to flip the card. */
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Both faces are stacked on top of each other. */
+.card-front,
+.card-back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Front side: emoji centered and visible after flip. */
+.card-front {
+  background: linear-gradient(180deg, #ffffff, #f3f8ff);
+  border: 1px solid var(--card-border);
+  transform: rotateY(180deg);
+  font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+  line-height: 1;
+}
+
+/* Back side: generic playing-card look with layered patterns. */
+.card-back {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.2) 0 8px,
+      rgba(255, 255, 255, 0.08) 8px 16px
+    ),
+    linear-gradient(160deg, var(--card-back-a), var(--card-back-b));
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  overflow: hidden;
+}
+
+.card-back::before,
+.card-back::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Inner border detail. */
+.card-back::before {
+  inset: 12%;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+}
+
+/* Center medallion detail. */
+.card-back::after {
+  width: 36%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35), transparent 70%);
+}
+
+/* Small-screen tweaks so spacing stays comfortable on phones. */
+@media (max-width: 560px) {
+  .dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #restart-button {
+    grid-column: 1 / -1;
+  }
+
+  #game-board {
+    width: min(96vw, 480px);
+  }
+}
